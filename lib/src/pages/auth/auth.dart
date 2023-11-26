@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't you have Google account?",
+                    "Don't you have any Google account?",
                     style: TextStyle(color: theme.colorScheme.onBackground),
                   ),
                   const SizedBox(height: 10),

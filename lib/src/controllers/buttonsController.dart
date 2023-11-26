@@ -12,9 +12,16 @@ class ButtonsController extends GetxController {
   // set obj(value) => this._obj.value = value;
   // get obj => this._obj.value;
 
-  final _buttonsCount = 1.obs;
+  final _buttonsCount = 9.obs;
   set buttonsCount(value) => this._buttonsCount.value = value;
   get buttonsCount => this._buttonsCount.value;
+
+  final _buttonToggles = {};
+  final _customButtonToggles = {};
+
+  void toggle(){
+
+  }
 
   //가까운 제곱수 찾기 for 버튼 정렬
   int closestSquare(int x) {
