@@ -12,7 +12,8 @@ class HomePage extends StatelessWidget {
     final theme = Theme.of(context);
     Get.put(ButtonsController());
 
-    // const buttonColors = [Colors.red, Colors.red, Colors.yellow, Colors.green, Colors.white, Colors.blue, Colors.indigo, Colors.purple, Colors.black];
+    const buttonColors = [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.tealAccent, Colors.blue, Colors.indigo, Colors.purple, Colors.pinkAccent];
+    const plusIndexes = [0,8];
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -30,7 +31,8 @@ class HomePage extends StatelessWidget {
                   children: List.generate(
                     9,
                         (int index) {
-                      const customIndexs = [0,8];
+                      final radius = BorderRadius.circular(plusIndexes.contains(index) ? 30 : 15);
+
                       return AnimationConfiguration.staggeredGrid(
                         position: index,
                         duration: const Duration(milliseconds: 375),
@@ -42,17 +44,35 @@ class HomePage extends StatelessWidget {
                             child: FadeInAnimation(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: customIndexs.contains(index) ? Color.fromARGB(255, 100, 100, 100) : Color.fromARGB(255, 50, 50, 50),
+                                  backgroundColor: plusIndexes.contains(index)
+                                      ? Color.fromARGB(255, 100, 100, 100)
+                                      : Color.fromARGB(255, 50, 50, 50),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(customIndexs.contains(index) ? 30 : 15),
-                                      side: BorderSide(color: Colors.transparent)
-                                  )
+                                    borderRadius: radius,
+                                    side: BorderSide(color: Colors.transparent),
+                                  ),
                                 ),
-                                onPressed: (){
+                                onPressed: () {
+                                  ButtonsController.to.executeToggle(ToggleType.plus, index);
                                   // ButtonsController.to.buttonsCount += 1;
                                 },
-                                child: Text(""),
-                              ),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    // 버튼의 콘텐츠를 여기에 배치
+
+                                    Positioned(
+                                      top: 15,
+                                      right: 0, // 우측 상단에 배치
+                                      child: CustomPaint(
+                                        size: Size(20, 20), // 세모 크기 설정
+                                        painter: TrianglePainter(buttonColors[index],), // 장식의 색상과 radius
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+
                             ),
                           ),
                         ),
@@ -69,3 +89,30 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
+class TrianglePainter extends CustomPainter {
+  final Color color;
+
+  TrianglePainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    var path = Path();
+    // 세모의 정점을 정의 (우측 상단 모서리에서 시작)
+    path.moveTo(size.width, 0); // 우측 상단 점
+    path.lineTo(size.width - size.width, 0); // 좌측 상단 점
+    path.lineTo(size.width, size.height); // 우측 하단 점
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}

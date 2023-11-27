@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 import 'dart:math';
 
+enum ToggleType{
+  plus, minus
+}
+
 class ButtonsController extends GetxController {
 // final ButtonsRepository repository;
 
@@ -16,11 +20,28 @@ class ButtonsController extends GetxController {
   set buttonsCount(value) => this._buttonsCount.value = value;
   get buttonsCount => this._buttonsCount.value;
 
-  final _buttonToggles = {};
-  final _customButtonToggles = {};
+  var _buttonToggles = List.filled(9, false);
+  var _buttonTogglesDates = {};
 
-  void toggle(){
+  DateTime startingPoint = DateTime.now();
+  DateTime endingPoint = DateTime.now();
 
+  var _toggle = false.obs;
+  set toggle(value) => this._toggle.value = value;
+  get toggle => this._toggle.value;
+
+  void executeToggle(ToggleType type, int index){
+    _buttonToggles[index] = !_buttonToggles[index];
+    if(_buttonToggles[index]){
+      startingPoint = DateTime.now();
+    }
+    else{
+      endingPoint = DateTime.now();
+      if(_buttonTogglesDates[index] == null){
+        _buttonTogglesDates[index] = List.empty(growable: true);
+      }
+      _buttonTogglesDates[index].add((startingPoint, endingPoint));
+    }
   }
 
   //가까운 제곱수 찾기 for 버튼 정렬
