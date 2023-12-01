@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'dart:math';
 
-enum ToggleType{
-  plus, minus
-}
+enum ToggleType { plus, minus }
 
 class ButtonsController extends GetxController {
 // final ButtonsRepository repository;
@@ -20,7 +18,7 @@ class ButtonsController extends GetxController {
   set buttonsCount(value) => this._buttonsCount.value = value;
   get buttonsCount => this._buttonsCount.value;
 
-  var _buttonToggles = List.filled(9, false);
+  var _buttonToggles = List.filled(9, false).obs;
   var _buttonTogglesDates = {};
 
   DateTime startingPoint = DateTime.now();
@@ -30,17 +28,21 @@ class ButtonsController extends GetxController {
   set toggle(value) => this._toggle.value = value;
   get toggle => this._toggle.value;
 
-  void executeToggle(ToggleType type, int index){
+  bool isToggled(int index) {
+    return _buttonToggles[index];
+  }
+
+  void executeToggle(ToggleType type, int index) {
     _buttonToggles[index] = !_buttonToggles[index];
-    if(_buttonToggles[index]){
+    if (_buttonToggles[index]) {
       startingPoint = DateTime.now();
-    }
-    else{
+    } else {
       endingPoint = DateTime.now();
-      if(_buttonTogglesDates[index] == null){
+      if (_buttonTogglesDates[index] == null) {
         _buttonTogglesDates[index] = List.empty(growable: true);
       }
       _buttonTogglesDates[index].add((startingPoint, endingPoint));
+      print(_buttonTogglesDates[index]);
     }
   }
 
